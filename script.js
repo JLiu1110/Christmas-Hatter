@@ -26,11 +26,11 @@ async function start() {
     const detections = await faceapi.detectAllFaces(image).withFaceLandmarks();
     faceapi.matchDimensions(canvas, image)
     const resizedDetections = faceapi.resizeResults(detections, image)
-    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-
-    const headPos =getHatPos(resizedDetections);
-    addHat(canvas,headPos);
-
+    resizedDetections.forEach((detection,i) => {
+      faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+      const headPos =getHatPos(resizedDetections);
+      addHat(canvas,headPos[i]);
+    })
   })
 }
 
@@ -52,8 +52,7 @@ function getHatPos(face){
 }
 
 function addHat(canvas,headPos){
-  const [head] = headPos;
-  const [headLeftX, headLeftY, headRightX, headRightY] = head
+  const [headLeftX, headLeftY, headRightX, headRightY] = headPos
   const ctx = canvas.getContext("2d");
 
   const image = new Image()
@@ -65,6 +64,7 @@ function addHat(canvas,headPos){
   image.width=image.width*scale
 
   image.onload = () => {
+    ctx.save();
     const angle = Math.atan((headRightY-headLeftY)/2.0/(headRightX-(headLeftX-headRightX)/2.0));
     const verTrans = image.height*Math.cos(angle)+image.width/3*Math.sin(angle)
     const horTrans = -image.width/3*Math.cos(angle)+image.height*Math.sin(angle)
