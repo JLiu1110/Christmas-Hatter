@@ -65,7 +65,7 @@ function addHat(canvas,headPos){
   image.width=image.width*scale
 
   image.onload = () => {
-    const angle = Math.atan(headRightY*1.0/(headRightX-(headLeftX-headRightX)/2.0));
+    const angle = Math.atan((headRightY-headLeftY)/2.0/(headRightX-(headLeftX-headRightX)/2.0));
     const verTrans = image.height*Math.cos(angle)+image.width/3*Math.sin(angle)
     const horTrans = -image.width/3*Math.cos(angle)+image.height*Math.sin(angle)
     ctx.translate(headLeftX+horTrans, headLeftY-verTrans);
@@ -75,13 +75,5 @@ function addHat(canvas,headPos){
     ctx.rotate(-angle);
     ctx.restore();
   };
-  // image.onload = () => {
-  //   ctx.translate(headLeftX, headLeftY);
-  //   const angle = Math.atan(headRightY*1.0/(headRightX-(headLeftX-headRightX)/2.0));
-  //   ctx.rotate(angle);
-  //   ctx.drawImage(image, headLeftX-image.width/3, headLeftY-image.height,image.width*1.5,image.height*1.5);
-  //   ctx.rotate(-angle);
-  //   ctx.restore();
-  // };
 }
 
